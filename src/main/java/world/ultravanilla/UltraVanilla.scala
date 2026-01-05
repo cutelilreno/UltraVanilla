@@ -103,7 +103,7 @@ class UltraVanilla extends JavaPlugin {
     @varargs
     def getRandomString(key: String, format: String*) = {
         val list = getConfig.getStringList("strings." + key)
-        var message = list.get(random.nextInt(list.size - 1))
+        var message = list.get(random.nextInt(list.size))
         var i = 0
         while ({
             i < format.length
