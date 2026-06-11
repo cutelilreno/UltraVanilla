@@ -247,6 +247,7 @@ class UltraVanilla extends JavaPlugin {
         )
 
         getCommand("nick").setExecutor(new NickCommand(UltraVanilla.instance))
+        getCommand("chatcolor").setExecutor(new ChatColorCommand(UltraVanilla.instance))
         getCommand("suicide").setExecutor(new SuicideCommand(UltraVanilla.instance))
         // getCommand("make").setExecutor(new MakeCommand(UltraVanilla.instance))
         getCommand("gm").setExecutor(new GmCommand(UltraVanilla.instance))
