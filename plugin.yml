@@ -21,6 +21,9 @@ commands:
     usage: |
       /nick <name>
       /nick [player] <name>
+  chatcolor:
+    description: Set your chat color
+    usage: /chatcolor <color|reset>
   reload:
     aliases: [ reloadconfig, uvreload ]
     description: Reload the configs
