@@ -7,6 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import world.ultravanilla.UltraVanilla;
 
+import java.awt.Color;
+
 public class ChatColorCommand extends UltraCommand implements CommandExecutor {
 
     public ChatColorCommand(UltraVanilla instance) {
@@ -36,7 +38,18 @@ public class ChatColorCommand extends UltraCommand implements CommandExecutor {
         }
 
         try {
+            if (args[0].startsWith("#") && contrastRatio(Color.decode(args[0])) < 2.0) { // 2.0 because mc chat bg is translucent and can be very dark
+                sender.sendMessage(CONTRAST_ERROR);
+                return true;
+            }
+
             ChatColor color = ChatColor.of(args[0]);
+
+            if (color == ChatColor.BLACK || color == ChatColor.DARK_GRAY) {
+                sender.sendMessage(CONTRAST_ERROR);
+                return true;
+            }
+
             UltraVanilla.set(player, "text-prefix", color.toString());
             sender.sendMessage(ChatColor.GREEN + "Chat color set to " + color + args[0] + ChatColor.GREEN + ".");
         } catch (IllegalArgumentException e) {
@@ -46,4 +59,32 @@ public class ChatColorCommand extends UltraCommand implements CommandExecutor {
         return true;
     
     }
+
+    // Contrast ratio calculation based on WCAG guidelines
+    private static double contrastRatio(Color c1) {
+        double l1 = relativeLuminance(c1);
+        double l2 = relativeLuminance(new Color(43, 43, 43)); // mc background estimate
+
+        double lighter = Math.max(l1, l2);
+        double darker = Math.min(l1, l2);
+
+        return (lighter + 0.05) / (darker + 0.05);
+    }
+
+    private static double relativeLuminance(Color color) {
+        double r = channel(color.getRed() / 255.0);
+        double g = channel(color.getGreen() / 255.0);
+        double b = channel(color.getBlue() / 255.0);
+
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    private static double channel(double c) {
+        return c <= 0.03928
+            ? c / 12.92
+            : Math.pow((c + 0.055) / 1.055, 2.4);
+    }
+
+    private static final String CONTRAST_ERROR =
+        ChatColor.RED + "The chosen color may be hard to read against the background. Please choose a different color.";
 }
