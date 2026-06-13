@@ -24,6 +24,7 @@ commands:
   chatcolor:
     description: Set your chat color
     usage: /chatcolor <color|reset>
+    permission: ultravanilla.chat.chatcolor-prefix
   reload:
     aliases: [ reloadconfig, uvreload ]
     description: Reload the configs
