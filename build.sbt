@@ -11,6 +11,8 @@ resolvers ++= List(
     "placeholderapi" at "https://repo.extendedclip.com/content/repositories/placeholderapi/"
 )
 libraryDependencies ++= List(
+    "net.kyori" % "adventure-api" % "4.25.0" % Provided,
+    "net.kyori" % "adventure-text-minimessage" % "4.25.0" % Provided,
     "io.papermc.paper" % "paper-api" % "1.21.1-R0.1-SNAPSHOT" % Provided,
     "net.luckperms" % "api" % "5.3" % Provided,
     "com.zaxxer" % "HikariCP" % "5.0.1",
@@ -35,4 +37,3 @@ assembly / assemblyMergeStrategy := {
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(x)
 }
-
