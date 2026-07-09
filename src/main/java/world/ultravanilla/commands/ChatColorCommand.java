@@ -5,11 +5,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import world.ultravanilla.UltraVanilla;
 
 import java.awt.Color;
 
-public class ChatColorCommand extends UltraCommand implements CommandExecutor {
+public class ChatColorCommand extends UltraCommand implements CommandExecutor, Listener {
 
     public ChatColorCommand(UltraVanilla instance) {
         super(instance);
@@ -21,7 +25,7 @@ public class ChatColorCommand extends UltraCommand implements CommandExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("ultravanilla.chat.color")) {
+        if (!sender.hasPermission("ultravanilla.chat.chatcolor-prefix")) {
             sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
             return true;
         }
@@ -58,6 +62,21 @@ public class ChatColorCommand extends UltraCommand implements CommandExecutor {
 
         return true;
     
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        
+        if (!player.hasPermission("ultravanilla.chat.chatcolor-prefix")) {
+            YamlConfiguration config = UltraVanilla.getPlayerConfig(player);
+            if (config != null) {
+                String prefix = config.getString("text-prefix");
+                if (prefix != null && !prefix.equals(ChatColor.RESET.toString())) {
+                    UltraVanilla.set(player, "text-prefix", ChatColor.RESET.toString());
+                }
+            }
+        }
     }
 
     // Contrast ratio calculation based on WCAG guidelines
